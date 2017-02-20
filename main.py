@@ -30,16 +30,20 @@ for t in range(200):
 
 	z3=a2.mm(w3)
 	y_pred=1/(1+math.e**(-z3))
+
+	
 	#y_pred=x.mm(w1).clamp(min=0).mm(w2)
 	loss = (y_pred - y).pow(2).sum()+lamda*(w1.pow(2).sum()+w2.pow(2).sum()+w3.pow(2).sum())
 	print(t, loss.data[0])
 	w1.grad.data.zero_()
 	w2.grad.data.zero_()
 	w3.grad.data.zero_()
+
 	loss.backward()
 	w1.data -= learning_rate * w1.grad.data
 	w2.data -= learning_rate * w2.grad.data
 	w3.data -= learning_rate * w3.grad.data
+	
 
 #read the test 
 test=map(int,open('test.txt').read().split())
