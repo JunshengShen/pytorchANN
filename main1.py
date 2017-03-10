@@ -19,29 +19,33 @@ y=Variable(y,requires_grad=False)
 
 
 model=torch.nn.Sequential(
-torch.nn.Conv2d(1,2,(2,4),stride=(1,2)),
+torch.nn.Conv2d(1,3,(2,4),stride=(1,2)),
 #torch.nn.Sigmoid(),
-torch.nn.Conv2d(2,4,3),
+torch.nn.Conv2d(3,9,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.Conv2d(4,8,3),
+torch.nn.Conv2d(9,27,3,stride=2),
+torch.nn.Conv2d(27,81,3),
+torch.nn.Conv2d(81,243,2),
 #torch.nn.Sigmoid(),
-torch.nn.Conv2d(8,16,3),
+#torch.nn.Conv2d(8,16,3,stride=2),
 
-torch.nn.Conv2d(16,32,3),
+#torch.nn.Conv2d(16,32,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.Conv2d(32,64,3),
+#torch.nn.Conv2d(32,64,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.ConvTranspose2d(64,32,3),
+#orch.nn.ConvTranspose2d(64,32,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.ConvTranspose2d(32,16,3),
+#torch.nn.ConvTranspose2d(32,16,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.ConvTranspose2d(16,8,3),
+#torch.nn.ConvTranspose2d(16,8,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.ConvTranspose2d(8,4,3),
+torch.nn.ConvTranspose2d(243,81,2),
+torch.nn.ConvTranspose2d(81,27,3),
+torch.nn.ConvTranspose2d(27,9,3,stride=2),
 #torch.nn.Sigmoid(),
-torch.nn.ConvTranspose2d(4,2,3),
+torch.nn.ConvTranspose2d(9,3,3,stride=2),
 
-torch.nn.ConvTranspose2d(2,1,2),
+torch.nn.ConvTranspose2d(3,1,2),
 #torch.nn.Sigmoid(),
 )
 
@@ -49,9 +53,9 @@ torch.nn.ConvTranspose2d(2,1,2),
 print model
 
 loss_fn=torch.nn.MSELoss(size_average=False)
-model=torch.load('modelSaved5')
-learning_rate=0.00001
-for t in range(0):
+model=torch.load('modelSavedStride2Tur3_1')
+learning_rate=0.0001
+for t in range(	10):
 	y_pred=model(X)
 	loss=loss_fn(y_pred,y)
 	print(t,loss.data[0])
@@ -60,7 +64,7 @@ for t in range(0):
 	for param in model.parameters():
 		param.data-=learning_rate*param.grad.data
 
-#torch.save(model,'modelSaved5')
+#torch.save(model,'modelSavedStride2Tur3_1')
 #model=torch.load('savetest')
 #read the test 
 #test=map(int,open('test.txt').read().split())
