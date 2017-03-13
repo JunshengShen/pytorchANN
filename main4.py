@@ -5,18 +5,23 @@ from torchvision import models
 import torch.nn.functional as F
 #read training sets
 fxr=map(int,open('x.txt').read().split())
-#fxr2=map(int,open('trainingSetsX2.txt').read().split())
+fxr2=map(int,open('circle.txt').read().split())
 fyr=map(int,open('y.txt').read().split())
 
 N=len(fxr)/10000#batch size
 
 
 x=torch.FloatTensor(fxr).resize_(N,1,100,100)
-#x2=torch.FloatTensor(fxr2).resize_(N,100,100)
-#X=torch.cat((x,x2),1)
-#X.resize_(N,1,20,40)
+x2=torch.FloatTensor(fxr2).resize_(1,100,100)
+x2=torch.cat((x2,x2,x2,x2,x2,x2,x2,x2,x2,x2),0)
+x2.resize_(N,1,100,100)
+X=torch.cat((x,x2),1)
+X.resize_(N,1,100,200)
+print X
+
 y=torch.FloatTensor(fyr).resize_(N,1,100,100)
-X=Variable(x,requires_grad=False)
+X=Variable(X,requires_grad=False)
+
 y=Variable(y,requires_grad=False)
 #a1=Variable(torch.randn(N,81,2,2).type(torch.FloatTensor),requires_grad=True)
 #a2=Variable(torch.randn(N,27,4,4).type(torch.FloatTensor),requires_grad=True)
@@ -26,7 +31,7 @@ y=Variable(y,requires_grad=False)
 class Model(nn.Module):
 	def __init__(self):
 		super(Model,self).__init__()
-		self.conv1 = nn.Conv2d(1,2,10,stride=2)
+		self.conv1 = nn.Conv2d(1,2,(10,20),stride=(2,4))
 		self.conv2 = nn.Conv2d(2,4,10)
 		self.conv3 = nn.Conv2d(4,8,10)
 		self.conv4 = nn.Conv2d(8,24,10)
@@ -63,9 +68,9 @@ model=Model()
 print model
 
 loss_fn=torch.nn.MSELoss(size_average=False)
-model=torch.load('modelSaved100MoreChannels_2')
+model=torch.load('modelSaved100withcircle_6')
 learning_rate=0.0000001
-for t in range(500):
+for t in range(1000):
 	y_pred=model(X)
 	loss=loss_fn(y_pred,y)
 	print(t,loss.data[0])
@@ -88,23 +93,23 @@ for t in range(500):
 #print a3
 #print a4
 
-torch.save(model,'modelSaved100MoreChannels_3')
+torch.save(model,'modelSaved100withcircle_7')
 #model=torch.load('modelSaved100ReLU_2')
 #read the test 
 #test=map(int,open('test.txt').read().split())
 #test=torch.FloatTensor(test).resize_(1,1,20,20)
 #test=Variable(test,requires_grad=False)
-testr1=map(int,open('x.txt').read().split())
+#testr1=map(int,open('x.txt').read().split())
 #testr2=map(int,open('testx2.txt').read().split())
-test=torch.FloatTensor(testr1).resize_(1,100,100)
+#test=torch.FloatTensor(testr1).resize_(1,100,100)
 
 #test2=torch.FloatTensor(testr2).resize_(N,20,20)
 
 #test=torch.cat((test1,test2),1)
-test.resize_(1,1,100,100)
+#test.resize_(1,1,100,100)
 
 
-X=Variable(test,requires_grad=False)
+#X=Variable(test,requires_grad=False)
 
 
 
