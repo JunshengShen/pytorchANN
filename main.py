@@ -7,8 +7,8 @@ fy=open('trainingSetsY.txt')
 fxr=map(int,fx.read().split())
 fyr=map(int,fy.read().split())
 
-dtype=torch.FloatTensor 
-#dtype=torch.cuda.FloatTensor for GPU
+#dtype=torch.FloatTensor 
+dtype=torch.cuda.FloatTensor #for GPU
 
 N=len(fxr)/400#batch size
 D_in,H,D_out=400,400,400#input size, hiden layer size, output size
